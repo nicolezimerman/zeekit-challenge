@@ -15,23 +15,31 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import { useHistory } from "react-router-dom";
+import StatisticsDialog from "../../components/StatisticsDialog";
+import { useSession } from "../../hooks/useSession";
 
 const useStyles = makeStyles({
   root: {
     backgroundColor: "#ffffff",
     minHeight: "100vh",
     maxHeight: "100vh",
+    marginTop: "0px",
   },
   container: {
-    height: "100vh",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   title: {
     textAlign: "center",
-    color: "#2196f3",
+    backgroundColor: "#2196f3",
+    color: "#ffffff",
+    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+    width: "100%",
+    padding: "25px",
+    marginTop: "0px",
+    boxSizing: "border-box",
   },
   buttons: {
     margin: "5px",
@@ -41,6 +49,7 @@ const useStyles = makeStyles({
     padding: "10px",
     width: "50%",
     boxSizing: "border-box",
+    letterSpacing: "3px",
   },
   textfield: {
     width: "50%",
@@ -74,26 +83,44 @@ const List: FunctionComponent = () => {
   } = useStyles();
   //change to page
   const { isLoading, isError, shows } = useShows(1);
-  const { genres, getGenresFromTV } = useGenres();
+  const { getGenresFromTV } = useGenres();
   const [selectedShow, setSelectedShow] = useState<number>(1);
   const [userAnswer, setUserAnswer] = useState<string>("");
   const [hint, setHint] = useState(<div></div>);
   const [name, setName] = useState<Array<string>>([]);
+  const [open, setOpen] = useState<boolean>(false);
+
+  const correctAnswers = useSession({
+    keyName: "correctAnswers",
+    defaultValue: 0,
+  });
+  const wrongAnswers = useSession({ keyName: "wrongAnswers", defaultValue: 0 });
+  const hintsUsed = useSession({ keyName: "hintsUsed", defaultValue: 0 });
 
   const points = useCounter(0);
   const lifes = useCounter(3);
   const hints = useCounter(1);
 
   //save in a provider or something with session
-  const correctAnswersCounter = useCounter(0);
-  const wrongAnswersCounter = useCounter(0);
-  const hintsCounter = useCounter(0);
+  const correctAnswersCounter = useCounter(correctAnswers.getter);
+  const wrongAnswersCounter = useCounter(wrongAnswers.getter);
+  const hintsCounter = useCounter(hintsUsed.getter);
 
   useEffect(() => {
     if (shows.length > 0) {
       setName(parseNameToShow(shows[selectedShow].name));
     }
   }, [shows]);
+
+  useEffect(() => {
+    correctAnswers.setter(correctAnswersCounter.counter.toString());
+    wrongAnswers.setter(wrongAnswersCounter.counter.toString());
+    hintsUsed.setter(hintsCounter.counter.toString());
+  }, [
+    hints.counter,
+    correctAnswersCounter.counter,
+    wrongAnswersCounter.counter,
+  ]);
 
   const endGame = () => history.push("/end");
 
@@ -127,8 +154,8 @@ const List: FunctionComponent = () => {
       setUserAnswer("");
       points.increase();
       correctAnswersCounter.increase();
-      setName(parseNameToShow(shows[selectedShow + 1].name));
       hints.reset();
+      setName(parseNameToShow(shows[selectedShow + 1].name));
       setHint(<div></div>);
     } else {
       lifes.decrease();
@@ -172,26 +199,32 @@ const List: FunctionComponent = () => {
     }
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className={root}>
+      <h1 className={title}>¡Guess the TV show name!</h1>
       <Container className={container} maxWidth={"sm"}>
         {isLoading && <Loader />}
         {isError && <div>Error</div>}
         {!isLoading && shows.length > 0 && (
           <>
-            <h1 className={title}>Guess the TV show name!</h1>
             <div className={info}>
               <h4>Points: {points.counter}</h4>
               <h4>Lifes: {lifes.counter}</h4>
             </div>
             <Paper className={paper} variant="outlined">
-              {name}
+              <h2>{name}</h2>
             </Paper>
             <TextField
               className={textfield}
               id="outlined-basic"
               label="Answer"
-              variant="outlined"
               onChange={handleInputChange}
               value={userAnswer}
             />
@@ -215,10 +248,22 @@ const List: FunctionComponent = () => {
                 Hint
               </Button>
             </div>
-            <Button className={buttons} variant="contained" color="primary">
+            <Button
+              className={buttons}
+              variant="contained"
+              color="primary"
+              onClick={handleClickOpen}
+            >
               Statistics
             </Button>
             <div className="hint">{hint}</div>
+            <StatisticsDialog
+              open={open}
+              onClose={handleClose}
+              correctAnswers={correctAnswers.getter}
+              wrongAnswers={wrongAnswers.getter}
+              hintsUsed={hintsUsed.getter}
+            />
           </>
         )}
       </Container>
