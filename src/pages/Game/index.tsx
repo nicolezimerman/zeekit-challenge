@@ -81,8 +81,7 @@ const List: FunctionComponent = () => {
     info,
     buttonsContainer,
   } = useStyles();
-  //change to page
-  const { isLoading, isError, shows } = useShows(1);
+  const { isLoading, isError, shows } = useShows();
   const { getGenresFromTV } = useGenres();
   const [selectedShow, setSelectedShow] = useState<number>(1);
   const [userAnswer, setUserAnswer] = useState<string>("");
@@ -160,7 +159,7 @@ const List: FunctionComponent = () => {
     } else {
       lifes.decrease();
       wrongAnswersCounter.increase();
-      if (lifes.counter === 0) {
+      if (lifes.counter === 1) {
         endGame();
       }
     }
