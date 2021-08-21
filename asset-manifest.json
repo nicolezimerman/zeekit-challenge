@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/zeekit-challenge/static/css/main.ca06b370.chunk.css",
+    "main.js": "/zeekit-challenge/static/js/main.dffbafe3.chunk.js",
+    "main.js.map": "/zeekit-challenge/static/js/main.dffbafe3.chunk.js.map",
+    "runtime-main.js": "/zeekit-challenge/static/js/runtime-main.231084cc.js",
+    "runtime-main.js.map": "/zeekit-challenge/static/js/runtime-main.231084cc.js.map",
+    "static/js/2.0af9acee.chunk.js": "/zeekit-challenge/static/js/2.0af9acee.chunk.js",
+    "static/js/2.0af9acee.chunk.js.map": "/zeekit-challenge/static/js/2.0af9acee.chunk.js.map",
+    "static/js/3.acca399b.chunk.js": "/zeekit-challenge/static/js/3.acca399b.chunk.js",
+    "static/js/3.acca399b.chunk.js.map": "/zeekit-challenge/static/js/3.acca399b.chunk.js.map",
+    "index.html": "/zeekit-challenge/index.html",
+    "static/css/main.ca06b370.chunk.css.map": "/zeekit-challenge/static/css/main.ca06b370.chunk.css.map",
+    "static/js/2.0af9acee.chunk.js.LICENSE.txt": "/zeekit-challenge/static/js/2.0af9acee.chunk.js.LICENSE.txt",
+    "static/media/tv.572d23a2.png": "/zeekit-challenge/static/media/tv.572d23a2.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.231084cc.js",
+    "static/js/2.0af9acee.chunk.js",
+    "static/css/main.ca06b370.chunk.css",
+    "static/js/main.dffbafe3.chunk.js"
+  ]
+}
