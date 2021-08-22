@@ -3,7 +3,7 @@ import {
   useEffect,
   useState,
   ChangeEventHandler,
-  MouseEventHandler,
+  KeyboardEventHandler
 } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import useShows from "../../hooks/useShows";
@@ -100,7 +100,6 @@ const List: FunctionComponent = () => {
   const lifes = useCounter(3);
   const hints = useCounter(1);
 
-  //save in a provider or something with session
   const correctAnswersCounter = useCounter(correctAnswers.getter);
   const wrongAnswersCounter = useCounter(wrongAnswers.getter);
   const hintsCounter = useCounter(hintsUsed.getter);
@@ -131,7 +130,7 @@ const List: FunctionComponent = () => {
 
   const parseNameToShow = (name: string) => {
     const nameParsed = name.split("").map((char) => {
-      if (char == " ") return " ";
+      if (char === " ") return " ";
       if (getRandomBoolean() === true) {
         return char;
       } else {
@@ -145,10 +144,10 @@ const List: FunctionComponent = () => {
     setUserAnswer(e.target.value);
   };
 
-  const checkTheGuess: MouseEventHandler<HTMLElement> = () => {
+  const checkTheGuess = () => {
     if (userAnswer === "") return;
     const { name } = shows[selectedShow];
-    if (userAnswer === name) {
+    if (userAnswer.toLowerCase() === name.toLowerCase()) {
       setSelectedShow((prevSelectedShow) => prevSelectedShow + 1);
       setUserAnswer("");
       points.increase();
@@ -205,6 +204,10 @@ const List: FunctionComponent = () => {
     setOpen(false);
   };
 
+  const handleOnEnter:KeyboardEventHandler<HTMLElement> = (e) =>{
+    if(e.key ==='Enter') checkTheGuess();
+  }
+
   return (
     <div className={root}>
       <h1 className={title}>¡Guess the TV show name!</h1>
@@ -226,6 +229,7 @@ const List: FunctionComponent = () => {
               label="Answer"
               onChange={handleInputChange}
               value={userAnswer}
+              onKeyDown={handleOnEnter}
             />
             <div className={buttonsContainer}>
               <Button

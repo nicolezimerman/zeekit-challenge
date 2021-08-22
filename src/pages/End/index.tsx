@@ -1,6 +1,5 @@
 import { FunctionComponent } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import tvIcon from "../../assets/tv.png";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
