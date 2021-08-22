@@ -158,6 +158,7 @@ const List: FunctionComponent = () => {
     } else {
       lifes.decrease();
       wrongAnswersCounter.increase();
+      setUserAnswer("");
       if (lifes.counter === 1) {
         endGame();
       }
